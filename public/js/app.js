@@ -5450,6 +5450,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -5513,43 +5516,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -5856,7 +5822,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
 
 
 
@@ -5880,10 +5845,28 @@ __webpack_require__.r(__webpack_exports__);
   },
   mounted: function mounted() {
     console.log("Página de inicio de sesión cargada");
+    this.getDetail();
   },
   methods: {
-    submit_form: function submit_form() {
+    getDetail: function getDetail() {
       var _this = this;
+      var formData = new FormData();
+      formData.append("id", localStorage.getItem('user'));
+      axios.post("/api/user/detail", formData).then(function (response) {
+        _this.processing = false;
+        if (response.data.status_code === 200) {
+          document.getElementById("name").value = response.data.data.name;
+          document.getElementById("email").value = response.data.data.email;
+          document.getElementById("city").value = response.data.data.city;
+          document.getElementById("address").value = response.data.data.address;
+          document.getElementById("birthdate").value = response.data.data.birthdate;
+        }
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    submit_form: function submit_form() {
+      var _this2 = this;
       this.processing = true;
       var formData = new FormData();
       formData.append("email", this.email == null ? "" : this.email);
@@ -5893,17 +5876,17 @@ __webpack_require__.r(__webpack_exports__);
       formData.append("birthdate", this.birthdate == null ? "" : this.birthdate);
       formData.append("password", this.password == null ? "" : this.password);
       axios.post("/api/user/update", formData).then(function (response) {
-        _this.processing = false;
+        _this2.processing = false;
         if (response.data.status_code === 200) {
           window.location.href = "/pokemons";
         } else {
           try {
             var error_json = JSON.parse(response.data.msg);
-            _this.loop_api_errors(error_json);
+            _this2.loop_api_errors(error_json);
           } catch (err) {
-            _this.server_errors = response.data.msg;
+            _this2.server_errors = response.data.msg;
           }
-          _this.error_class = "error";
+          _this2.error_class = "error";
         }
       })["catch"](function (error) {
         console.log(error);
@@ -5984,6 +5967,9 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
 
 
 
@@ -5994,8 +5980,7 @@ __webpack_require__.r(__webpack_exports__);
       error_class: "",
       processing: false,
       name: this.$attrs.name,
-      ref: null,
-      id: null,
+      favorite: false,
       message: this.prop_message
     };
   },
@@ -6004,43 +5989,78 @@ __webpack_require__.r(__webpack_exports__);
     prop_message: String
   },
   methods: {
-    favorite: function favorite(ref) {
+    getValidation: function getValidation() {
       var _this = this;
-      this.ref = ref;
-      this.id = localStorage.getItem("user");
       var formData = new FormData();
-      formData.append("id", this.id);
-      formData.append("ref", this.ref);
-      axios.post("/api/user/pokemons/favorite", formData).then(function (response) {
-        _this.processing = false;
+      formData.append("user", localStorage.getItem('user'));
+      formData.append("ref", localStorage.getItem('ref'));
+      axios.post("/api/user/pokemons/validation", formData).then(function (response) {
         if (response.data.status_code === 200) {
-          alert('You added this pokemon to your favorites');
+          if (response.data.data) {
+            _this.favorite = true;
+          } else {
+            _this.favorite = false;
+          }
+        }
+      })["catch"](function (error) {
+        console.log(error);
+      });
+    },
+    favorites: function favorites(ref) {
+      var _this2 = this;
+      var formData = new FormData();
+      formData.append("id", localStorage.getItem('user'));
+      formData.append("ref", localStorage.getItem('ref'));
+      axios.post("/api/user/pokemons/favorite", formData).then(function (response) {
+        _this2.processing = false;
+        if (response.data.status_code === 200) {
+          //alert('You added this pokemon to your favorites');
+
+          if (response.data.data) {
+            _this2.favorite = true;
+          } else {
+            _this2.favorite = false;
+          }
         } else {
           try {
             var error_json = JSON.parse(response.data.msg);
-            _this.loop_api_errors(error_json);
+            _this2.loop_api_errors(error_json);
           } catch (err) {
-            _this.server_errors = response.data.msg;
+            _this2.server_errors = response.data.msg;
           }
-          _this.error_class = "error";
+          _this2.error_class = "error";
         }
       })["catch"](function (error) {
         console.log(error);
       });
     },
     getPokemon: function getPokemon() {
-      var _this2 = this;
+      var _this3 = this;
       axios.get("http://127.0.0.1:8000/api/user/pokemons/view/" + this.name).then(function (response) {
-        return _this2.pokemon = response.data.data;
+        _this3.processing = false;
+        if (response.data.status_code === 200) {
+          _this3.pokemon = response.data.data;
+          _this3.ref = response.data.data.id;
+          localStorage.setItem('ref', response.data.data.id);
+        } else {
+          try {
+            var error_json = JSON.parse(response.data.msg);
+            _this3.loop_api_errors(error_json);
+          } catch (err) {
+            _this3.server_errors = response.data.msg;
+          }
+          _this3.error_class = "error";
+        }
       })["catch"](function (error) {
         console.log(error);
-        _this2.errored = true;
+        _this3.errored = true;
       });
     }
   },
   mounted: function mounted() {
     this.name = this.$attrs.name;
     this.getPokemon();
+    this.getValidation();
   }
 });
 
@@ -29270,164 +29290,167 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "login" }, [
-      _c("div", {}, [
-        _c(
-          "h1",
-          {
-            staticClass: "title is-3 signup-title",
-            attrs: { id: "main-signup-title" },
-          },
-          [_vm._v("\n                Iniciar sesión\n            ")]
-        ),
-        _vm._v(" "),
-        _c("h2", [
-          _vm._v(
-            "\n                Bienvenido de regreso a tu cuenta\n            "
-          ),
-        ]),
-        _vm._v(" "),
-        _c(
-          "div",
-          {
-            staticClass: "alert alert-primary alert-dismissible none mb-4",
-            class: [_vm.error_class],
-          },
-          [
-            _c("a", { domProps: { innerHTML: _vm._s(_vm.server_errors) } }),
-            _vm._v(
-              "\n                " + _vm._s(_vm.message) + "\n            "
-            ),
-          ]
-        ),
-        _vm._v(" "),
-        _c("div", [
+      _c("div", { staticClass: "hero-body-login" }, [
+        _c("div", { staticClass: "content_login" }, [
           _c(
-            "form",
+            "h1",
             {
-              staticClass: "signup-form is-mobile-spaced",
-              on: {
-                submit: function ($event) {
-                  $event.preventDefault()
-                  return _vm.submit_form.apply(null, arguments)
-                },
-              },
+              staticClass: "title is-3 signup-title",
+              attrs: { id: "main-signup-title" },
+            },
+            [_vm._v("\n                Log in\n            ")]
+          ),
+          _vm._v(" "),
+          _c("h2", [
+            _vm._v(
+              "\n                Welcome back to your account\n            "
+            ),
+          ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "alert alert-primary alert-dismissible none mb-4",
+              class: [_vm.error_class],
             },
             [
-              _c("div", [
-                _c("div", [
-                  _c("div", { staticClass: "control has-validation" }, [
-                    _c("div", { staticClass: "auth-label" }, [
-                      _vm._v(
-                        "\n                                    Correo Electrónico\n                                "
-                      ),
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.email,
-                          expression: "email",
-                        },
-                        {
-                          name: "validate",
-                          rawName: "v-validate",
-                          value: "required|email",
-                          expression:
-                            "\n                                    'required|email'\n                                ",
-                        },
-                      ],
-                      staticClass: "input",
-                      attrs: {
-                        type: "email",
-                        name: "email",
-                        autocomplete: "off",
-                        placeholder:
-                          "Por favor ingrese su correo electrónico registrado",
-                      },
-                      domProps: { value: _vm.email },
-                      on: {
-                        input: function ($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.email = $event.target.value
-                        },
-                      },
-                    }),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "column is-12" }, [
-                  _c("div", { staticClass: "control has-validation" }, [
-                    _c("div", { staticClass: "auth-label" }, [
-                      _vm._v(
-                        "\n                                    Contraseña\n                                "
-                      ),
-                    ]),
-                    _vm._v(" "),
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.password,
-                          expression: "password",
-                        },
-                        {
-                          name: "validate",
-                          rawName: "v-validate",
-                          value: "required",
-                          expression: "'required'",
-                        },
-                      ],
-                      staticClass: "input",
-                      attrs: {
-                        type: "password",
-                        name: "password",
-                        autocomplete: "new-password",
-                        placeholder: "Por favor, introduzca su contraseña",
-                      },
-                      domProps: { value: _vm.password },
-                      on: {
-                        input: function ($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.password = $event.target.value
-                        },
-                      },
-                    }),
-                  ]),
-                ]),
-                _vm._v(" "),
-                _c("div", [
-                  _c(
-                    "button",
-                    {
-                      staticClass: "btn btn-primary",
-                      attrs: {
-                        type: "submit",
-                        disabled: _vm.processing == true,
-                      },
-                    },
-                    [
-                      _vm.processing == true
-                        ? _c("i", { staticClass: "fa fa-circle-notch fa-spin" })
-                        : _c("span", [
-                            _vm._v(
-                              "\n                                    Iniciar sesión\n                                "
-                            ),
-                          ]),
-                    ]
-                  ),
-                  _vm._v(" "),
-                  _vm._m(0),
-                ]),
-              ]),
+              _c("a", { domProps: { innerHTML: _vm._s(_vm.server_errors) } }),
+              _vm._v(
+                "\n                " + _vm._s(_vm.message) + "\n            "
+              ),
             ]
           ),
+          _vm._v(" "),
+          _c("div", [
+            _c(
+              "form",
+              {
+                staticClass: "signup-form is-mobile-spaced",
+                on: {
+                  submit: function ($event) {
+                    $event.preventDefault()
+                    return _vm.submit_form.apply(null, arguments)
+                  },
+                },
+              },
+              [
+                _c("div", [
+                  _c("div", [
+                    _c("div", { staticClass: "control has-validation" }, [
+                      _c("div", { staticClass: "auth-label" }, [
+                        _vm._v(
+                          "\n                                    Email\n                                "
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.email,
+                            expression: "email",
+                          },
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: "required|email",
+                            expression:
+                              "\n                                    'required|email'\n                                ",
+                          },
+                        ],
+                        staticClass: "input",
+                        attrs: {
+                          type: "email",
+                          name: "email",
+                          autocomplete: "off",
+                          placeholder: "Please enter your registered email",
+                        },
+                        domProps: { value: _vm.email },
+                        on: {
+                          input: function ($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.email = $event.target.value
+                          },
+                        },
+                      }),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "column is-12" }, [
+                    _c("div", { staticClass: "control has-validation" }, [
+                      _c("div", { staticClass: "auth-label" }, [
+                        _vm._v(
+                          "\n                                    Password\n                                "
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.password,
+                            expression: "password",
+                          },
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: "required",
+                            expression: "'required'",
+                          },
+                        ],
+                        staticClass: "input",
+                        attrs: {
+                          type: "password",
+                          name: "password",
+                          autocomplete: "new-password",
+                          placeholder: "Please enter your password",
+                        },
+                        domProps: { value: _vm.password },
+                        on: {
+                          input: function ($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.password = $event.target.value
+                          },
+                        },
+                      }),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "display_grid" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary",
+                        attrs: {
+                          type: "submit",
+                          disabled: _vm.processing == true,
+                        },
+                      },
+                      [
+                        _vm.processing == true
+                          ? _c("i", {
+                              staticClass: "fa fa-circle-notch fa-spin",
+                            })
+                          : _c("span", [
+                              _vm._v(
+                                "\n                                    Go to pokemon\n                                "
+                              ),
+                            ]),
+                      ]
+                    ),
+                    _vm._v(" "),
+                    _vm._m(0),
+                  ]),
+                ]),
+              ]
+            ),
+          ]),
         ]),
       ]),
     ]),
@@ -29438,9 +29461,9 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("span", [
+    return _c("span", { staticClass: "align-content-center" }, [
       _vm._v(
-        "\n                                O crear tu cuenta\n                                "
+        "\n                                or create your account\n                                "
       ),
       _c("a", { attrs: { href: "/register" } }, [
         _vm._v(
@@ -29498,8 +29521,6 @@ var render = function () {
                 ),
               ]),
               _vm._v(" "),
-              _vm._m(1),
-              _vm._v(" "),
               _c("li", { staticClass: "nav-item" }, [
                 _c(
                   "a",
@@ -29535,16 +29556,6 @@ var staticRenderFns = [
       [_c("span", { staticClass: "navbar-toggler-icon" })]
     )
   },
-  function () {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("li", { staticClass: "nav-item" }, [
-      _c("a", { staticClass: "nav-link", attrs: { href: "#" } }, [
-        _vm._v("Favorites"),
-      ]),
-    ])
-  },
 ]
 render._withStripped = true
 
@@ -29569,19 +29580,12 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm._m(0),
-    _vm._v(" "),
-    _c("div", { staticClass: "signup-wrapper" }, [
-      _c("img", {
-        staticClass: "card-bg",
-        attrs: { src: "/images/backgrounds/signup/vuero-signup.png", alt: "" },
-      }),
-      _vm._v(" "),
-      _c("div", { staticClass: "hero is-fullheight" }, [
+    _c("div", { staticClass: "container" }, [
+      _c("div", { staticClass: "signin" }, [
         _c("div", { staticClass: "hero-body" }, [
           _c("div", { staticClass: "container" }, [
             _c("div", { staticClass: "columns signup-columns" }, [
-              _c("div", { staticClass: "column is-5 is-offset-1" }, [
+              _c("div", { staticClass: "column m-4" }, [
                 _c(
                   "h1",
                   {
@@ -29590,7 +29594,7 @@ var render = function () {
                   },
                   [
                     _vm._v(
-                      "\n                                ¡Bienvenid@!\n                            "
+                      "\n                                Welcome to Pokemon!\n                            "
                     ),
                   ]
                 ),
@@ -29603,7 +29607,7 @@ var render = function () {
                   },
                   [
                     _vm._v(
-                      "\n                                Para empezar compártenos la siguiente\n                                información\n                            "
+                      "\n                                To get started, share the following information with us.\n                            "
                     ),
                   ]
                 ),
@@ -29616,7 +29620,7 @@ var render = function () {
                     class: [_vm.error_class],
                   },
                   [
-                    _vm._m(1),
+                    _vm._m(0),
                     _vm._v(" "),
                     _c("a", {
                       domProps: { innerHTML: _vm._s(_vm.server_errors) },
@@ -29651,6 +29655,12 @@ var render = function () {
                           _c("div", { staticClass: "column is-12" }, [
                             _c("div", { staticClass: "field" }, [
                               _c("div", { staticClass: "control" }, [
+                                _c("div", { staticClass: "auth-label" }, [
+                                  _vm._v(
+                                    "\n                                                        Email\n                                                    "
+                                  ),
+                                ]),
+                                _vm._v(" "),
                                 _c("input", {
                                   directives: [
                                     {
@@ -29685,12 +29695,6 @@ var render = function () {
                                     },
                                   },
                                 }),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "auth-label" }, [
-                                  _vm._v(
-                                    "\n                                                        Correo Electrónico\n                                                    "
-                                  ),
-                                ]),
                               ]),
                             ]),
                           ]),
@@ -29698,6 +29702,12 @@ var render = function () {
                           _c("div", { staticClass: "column is-12" }, [
                             _c("div", { staticClass: "field" }, [
                               _c("div", { staticClass: "control" }, [
+                                _c("div", { staticClass: "auth-label" }, [
+                                  _vm._v(
+                                    "\n                                                        Password\n                                                    "
+                                  ),
+                                ]),
+                                _vm._v(" "),
                                 _c("input", {
                                   directives: [
                                     {
@@ -29732,22 +29742,15 @@ var render = function () {
                                     },
                                   },
                                 }),
-                                _vm._v(" "),
-                                _c("div", { staticClass: "auth-label" }, [
-                                  _vm._v(
-                                    "\n                                                        Contraseña\n                                                    "
-                                  ),
-                                ]),
                               ]),
                             ]),
                           ]),
                           _vm._v(" "),
-                          _c("div", { staticClass: "column control is-flex" }, [
+                          _c("div", { staticClass: "display_grid" }, [
                             _c(
                               "button",
                               {
-                                staticClass:
-                                  "button button v-button is-bold is-fullwidth is-raised is-primary",
+                                staticClass: "btn btn-primary",
                                 attrs: {
                                   type: "submit",
                                   disabled: _vm.processing == true,
@@ -29760,11 +29763,13 @@ var render = function () {
                                     })
                                   : _c("span", [
                                       _vm._v(
-                                        "\n                                                    Siguiente\n                                                "
+                                        "\n                                                    Go to pokemon\n                                                "
                                       ),
                                     ]),
                               ]
                             ),
+                            _vm._v(" "),
+                            _vm._m(1),
                           ]),
                         ]),
                       ]
@@ -29784,22 +29789,22 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "signup-nav" }, [
-      _c("div", { staticClass: "signup-nav-inner" }, [
-        _c("a", { staticClass: "logo", attrs: { href: "/" } }, [
-          _c("img", {
-            staticClass: "small-footer-logo light-image-l",
-            attrs: { src: "/assets/img/logos/logo/logo.svg", alt: "" },
-          }),
-        ]),
-      ]),
-    ])
+    return _c("span", [_c("i", { staticClass: "mdi mdi-alert" })])
   },
   function () {
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("span", [_c("i", { staticClass: "mdi mdi-alert" })])
+    return _c("span", { staticClass: "align-content-center" }, [
+      _vm._v(
+        "\n                                                or login with your account\n                                                "
+      ),
+      _c("a", { attrs: { href: "/login" } }, [
+        _vm._v(
+          "\n                                                    pokemon\n                                                "
+        ),
+      ]),
+    ])
   },
 ]
 render._withStripped = true
@@ -29827,340 +29832,341 @@ var render = function () {
   return _c("div", [
     _c("div", { staticClass: "container center_form_update" }, [
       _c("div", { staticClass: "update_data m-2" }, [
-        _c("div", { staticClass: "columns m-4" }, [
-          _c("div", { staticClass: "column is-5 m-2" }, [
-            _c("h4", { staticClass: "subtitle signup-subtitle" }, [
-              _vm._v(
-                "\n                        Update your account information\n                    "
-              ),
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              {
-                staticClass: "alert alert-primary alert-dismissible none mb-4",
-                class: [_vm.error_class],
-              },
-              [
-                _vm._m(0),
-                _vm._v(" "),
-                _c("a", { domProps: { innerHTML: _vm._s(_vm.server_errors) } }),
-                _vm._v(
-                  "\n                        " +
-                    _vm._s(_vm.message) +
-                    "\n                    "
-                ),
-              ]
-            ),
-            _vm._v(" "),
-            _c(
-              "form",
-              {
-                on: {
-                  submit: function ($event) {
-                    $event.preventDefault()
-                    return _vm.submit_form.apply(null, arguments)
-                  },
-                },
-              },
-              [
-                _c("div", { staticClass: "columns is-multiline" }, [
-                  _c("div", { staticClass: "column is-12" }, [
-                    _c("div", { staticClass: "field" }, [
-                      _c("div", { staticClass: "control" }, [
-                        _c("div", { staticClass: "update-label" }, [
-                          _vm._v(
-                            "\n                                                Fullname\n                                            "
-                          ),
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.name,
-                              expression: "name",
-                            },
-                            {
-                              name: "validate",
-                              rawName: "v-validate",
-                              value: "required",
-                              expression:
-                                "\n                                                    'required'\n                                                ",
-                            },
-                          ],
-                          staticClass: "input",
-                          attrs: {
-                            type: "text",
-                            name: "name",
-                            autocomplete: "off",
-                            placeholder: "",
-                          },
-                          domProps: { value: _vm.name },
-                          on: {
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.name = $event.target.value
-                            },
-                          },
-                        }),
-                      ]),
-                    ]),
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "column is-12" }, [
-                    _c("div", { staticClass: "field" }, [
-                      _c("div", { staticClass: "control" }, [
-                        _c("div", { staticClass: "update-label" }, [
-                          _vm._v(
-                            "\n                                                Address\n                                            "
-                          ),
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.address,
-                              expression: "address",
-                            },
-                            {
-                              name: "validate",
-                              rawName: "v-validate",
-                              value: "required",
-                              expression:
-                                "\n                                                    'required'\n                                                ",
-                            },
-                          ],
-                          staticClass: "input",
-                          attrs: {
-                            type: "text",
-                            name: "address",
-                            autocomplete: "off",
-                            placeholder: "",
-                          },
-                          domProps: { value: _vm.address },
-                          on: {
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.address = $event.target.value
-                            },
-                          },
-                        }),
-                      ]),
-                    ]),
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "column is-12" }, [
-                    _c("div", { staticClass: "field" }, [
-                      _c("div", { staticClass: "control" }, [
-                        _c("div", { staticClass: "update-label" }, [
-                          _vm._v(
-                            "\n                                                City\n                                            "
-                          ),
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.city,
-                              expression: "city",
-                            },
-                            {
-                              name: "validate",
-                              rawName: "v-validate",
-                              value: "required",
-                              expression:
-                                "\n                                                    'required'\n                                                ",
-                            },
-                          ],
-                          staticClass: "input",
-                          attrs: {
-                            type: "text",
-                            name: "city",
-                            autocomplete: "off",
-                            placeholder: "",
-                          },
-                          domProps: { value: _vm.city },
-                          on: {
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.city = $event.target.value
-                            },
-                          },
-                        }),
-                      ]),
-                    ]),
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "column is-12" }, [
-                    _c("div", { staticClass: "field" }, [
-                      _c("div", { staticClass: "control" }, [
-                        _c("div", { staticClass: "update-label" }, [
-                          _vm._v(
-                            "\n                                                Birthday\n                                            "
-                          ),
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.birthdate,
-                              expression: "birthdate",
-                            },
-                            {
-                              name: "validate",
-                              rawName: "v-validate",
-                              value: "required",
-                              expression:
-                                "\n                                                    'required'\n                                                ",
-                            },
-                          ],
-                          staticClass: "input",
-                          attrs: {
-                            type: "date",
-                            name: "birthdate",
-                            autocomplete: "off",
-                            placeholder: "",
-                          },
-                          domProps: { value: _vm.birthdate },
-                          on: {
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.birthdate = $event.target.value
-                            },
-                          },
-                        }),
-                      ]),
-                    ]),
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "column is-12" }, [
-                    _c("div", { staticClass: "field" }, [
-                      _c("div", { staticClass: "control" }, [
-                        _c("div", { staticClass: "update-label" }, [
-                          _vm._v(
-                            "\n                                                Email\n                                            "
-                          ),
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.email,
-                              expression: "email",
-                            },
-                            {
-                              name: "validate",
-                              rawName: "v-validate",
-                              value: "required|email",
-                              expression:
-                                "\n                                                    'required|email'\n                                                ",
-                            },
-                          ],
-                          staticClass: "input",
-                          attrs: {
-                            type: "email",
-                            name: "email",
-                            autocomplete: "off",
-                            placeholder: "",
-                          },
-                          domProps: { value: _vm.email },
-                          on: {
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.email = $event.target.value
-                            },
-                          },
-                        }),
-                      ]),
-                    ]),
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "column is-12" }, [
-                    _c("div", { staticClass: "field" }, [
-                      _c("div", { staticClass: "control" }, [
-                        _c("div", { staticClass: "update-label" }, [
-                          _vm._v(
-                            "\n                                                Password\n                                            "
-                          ),
-                        ]),
-                        _vm._v(" "),
-                        _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: _vm.password,
-                              expression: "password",
-                            },
-                          ],
-                          staticClass: "input",
-                          attrs: {
-                            type: "password",
-                            name: "password",
-                            autocomplete: "off",
-                            placeholder: "",
-                          },
-                          domProps: { value: _vm.password },
-                          on: {
-                            input: function ($event) {
-                              if ($event.target.composing) {
-                                return
-                              }
-                              _vm.password = $event.target.value
-                            },
-                          },
-                        }),
-                      ]),
-                    ]),
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "column control is-flex" }, [
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-primary btn_save_update",
-                        attrs: {
-                          type: "submit",
-                          disabled: _vm.processing == true,
-                        },
-                      },
-                      [
-                        _vm.processing == true
-                          ? _c("i", {
-                              staticClass: "fa fa-circle-notch fa-spin",
-                            })
-                          : _c("span", [
-                              _vm._v(
-                                "\n                                            Save\n                                        "
-                              ),
-                            ]),
-                      ]
-                    ),
-                  ]),
-                ]),
-              ]
+        _c("div", { staticClass: "column is-5 m-4" }, [
+          _c("h4", { staticClass: "subtitle signup-subtitle" }, [
+            _vm._v(
+              "\n                        Update your account information\n                    "
             ),
           ]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticClass: "alert alert-primary alert-dismissible none mb-4",
+              class: [_vm.error_class],
+            },
+            [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("a", { domProps: { innerHTML: _vm._s(_vm.server_errors) } }),
+              _vm._v(
+                "\n                        " +
+                  _vm._s(_vm.message) +
+                  "\n                    "
+              ),
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "form",
+            {
+              on: {
+                submit: function ($event) {
+                  $event.preventDefault()
+                  return _vm.submit_form.apply(null, arguments)
+                },
+              },
+            },
+            [
+              _c("div", { staticClass: "columns is-multiline" }, [
+                _c("div", { staticClass: "column is-12" }, [
+                  _c("div", { staticClass: "field" }, [
+                    _c("div", { staticClass: "control" }, [
+                      _c("div", { staticClass: "update-label" }, [
+                        _vm._v(
+                          "\n                                                Fullname\n                                            "
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.name,
+                            expression: "name",
+                          },
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: "required",
+                            expression:
+                              "\n                                                    'required'\n                                                ",
+                          },
+                        ],
+                        staticClass: "input",
+                        attrs: {
+                          type: "text",
+                          name: "name",
+                          id: "name",
+                          autocomplete: "off",
+                          placeholder: "",
+                        },
+                        domProps: { value: _vm.name },
+                        on: {
+                          input: function ($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.name = $event.target.value
+                          },
+                        },
+                      }),
+                    ]),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "column is-12" }, [
+                  _c("div", { staticClass: "field" }, [
+                    _c("div", { staticClass: "control" }, [
+                      _c("div", { staticClass: "update-label" }, [
+                        _vm._v(
+                          "\n                                                Address\n                                            "
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.address,
+                            expression: "address",
+                          },
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: "required",
+                            expression:
+                              "\n                                                    'required'\n                                                ",
+                          },
+                        ],
+                        staticClass: "input",
+                        attrs: {
+                          type: "text",
+                          name: "address",
+                          id: "address",
+                          autocomplete: "off",
+                          placeholder: "",
+                        },
+                        domProps: { value: _vm.address },
+                        on: {
+                          input: function ($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.address = $event.target.value
+                          },
+                        },
+                      }),
+                    ]),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "column is-12" }, [
+                  _c("div", { staticClass: "field" }, [
+                    _c("div", { staticClass: "control" }, [
+                      _c("div", { staticClass: "update-label" }, [
+                        _vm._v(
+                          "\n                                                City\n                                            "
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.city,
+                            expression: "city",
+                          },
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: "required",
+                            expression:
+                              "\n                                                    'required'\n                                                ",
+                          },
+                        ],
+                        staticClass: "input",
+                        attrs: {
+                          type: "text",
+                          name: "city",
+                          id: "city",
+                          autocomplete: "off",
+                          placeholder: "",
+                        },
+                        domProps: { value: _vm.city },
+                        on: {
+                          input: function ($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.city = $event.target.value
+                          },
+                        },
+                      }),
+                    ]),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "column is-12" }, [
+                  _c("div", { staticClass: "field" }, [
+                    _c("div", { staticClass: "control" }, [
+                      _c("div", { staticClass: "update-label" }, [
+                        _vm._v(
+                          "\n                                                Birthday\n                                            "
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.birthdate,
+                            expression: "birthdate",
+                          },
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: "required",
+                            expression:
+                              "\n                                                    'required'\n                                                ",
+                          },
+                        ],
+                        staticClass: "input",
+                        attrs: {
+                          type: "date",
+                          name: "birthdate",
+                          id: "birthdate",
+                          autocomplete: "off",
+                          placeholder: "",
+                        },
+                        domProps: { value: _vm.birthdate },
+                        on: {
+                          input: function ($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.birthdate = $event.target.value
+                          },
+                        },
+                      }),
+                    ]),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "column is-12" }, [
+                  _c("div", { staticClass: "field" }, [
+                    _c("div", { staticClass: "control" }, [
+                      _c("div", { staticClass: "update-label" }, [
+                        _vm._v(
+                          "\n                                                Email\n                                            "
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.email,
+                            expression: "email",
+                          },
+                          {
+                            name: "validate",
+                            rawName: "v-validate",
+                            value: "required|email",
+                            expression:
+                              "\n                                                    'required|email'\n                                                ",
+                          },
+                        ],
+                        staticClass: "input",
+                        attrs: {
+                          type: "email",
+                          name: "email",
+                          id: "email",
+                          autocomplete: "off",
+                          placeholder: "",
+                        },
+                        domProps: { value: _vm.email },
+                        on: {
+                          input: function ($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.email = $event.target.value
+                          },
+                        },
+                      }),
+                    ]),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "column is-12" }, [
+                  _c("div", { staticClass: "field" }, [
+                    _c("div", { staticClass: "control" }, [
+                      _c("div", { staticClass: "update-label" }, [
+                        _vm._v(
+                          "\n                                                Password\n                                            "
+                        ),
+                      ]),
+                      _vm._v(" "),
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.password,
+                            expression: "password",
+                          },
+                        ],
+                        staticClass: "input",
+                        attrs: {
+                          type: "password",
+                          name: "password",
+                          autocomplete: "off",
+                          placeholder: "",
+                        },
+                        domProps: { value: _vm.password },
+                        on: {
+                          input: function ($event) {
+                            if ($event.target.composing) {
+                              return
+                            }
+                            _vm.password = $event.target.value
+                          },
+                        },
+                      }),
+                    ]),
+                  ]),
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "column control is-flex" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary btn_save_update",
+                      attrs: {
+                        type: "submit",
+                        disabled: _vm.processing == true,
+                      },
+                    },
+                    [
+                      _vm.processing == true
+                        ? _c("i", { staticClass: "fa fa-circle-notch fa-spin" })
+                        : _c("span", [
+                            _vm._v(
+                              "\n                                            Save\n                                        "
+                            ),
+                          ]),
+                    ]
+                  ),
+                ]),
+              ]),
+            ]
+          ),
         ]),
       ]),
     ]),
@@ -30283,38 +30289,72 @@ var render = function () {
       _vm._v(" "),
       _c("div", { staticClass: "col-sm-7 pokemon display_block" }, [
         _c("div", { staticClass: "align-end" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-primary button_favorites_pokemon",
-              on: {
-                click: function ($event) {
-                  return _vm.favorite(_vm.pokemon.id)
-                },
-              },
-            },
-            [
-              _c("i", [
-                _c(
-                  "svg",
-                  {
-                    attrs: {
-                      xmlns: "http://www.w3.org/2000/svg",
-                      viewBox: "0 0 576 512",
+          _vm.favorite === true
+            ? _c(
+                "button",
+                {
+                  staticClass:
+                    "btn btn-primary button_favorites_pokemon favorite",
+                  on: {
+                    click: function ($event) {
+                      return _vm.favorites(_vm.pokemon.id)
                     },
                   },
-                  [
-                    _c("path", {
-                      attrs: {
-                        d: "M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z",
+                },
+                [
+                  _c("i", [
+                    _c(
+                      "svg",
+                      {
+                        attrs: {
+                          xmlns: "http://www.w3.org/2000/svg",
+                          viewBox: "0 0 576 512",
+                        },
                       },
-                    }),
-                  ]
-                ),
-              ]),
-              _vm._v(" Add to favorites"),
-            ]
-          ),
+                      [
+                        _c("path", {
+                          attrs: {
+                            d: "M316.9 18C311.6 7 300.4 0 288.1 0s-23.4 7-28.8 18L195 150.3 51.4 171.5c-12 1.8-22 10.2-25.7 21.7s-.7 24.2 7.9 32.7L137.8 329 113.2 474.7c-2 12 3 24.2 12.9 31.3s23 8 33.8 2.3l128.3-68.5 128.3 68.5c10.8 5.7 23.9 4.9 33.8-2.3s14.9-19.3 12.9-31.3L438.5 329 542.7 225.9c8.6-8.5 11.7-21.2 7.9-32.7s-13.7-19.9-25.7-21.7L381.2 150.3 316.9 18z",
+                          },
+                        }),
+                      ]
+                    ),
+                  ]),
+                  _vm._v(" Favorites"),
+                ]
+              )
+            : _c(
+                "button",
+                {
+                  staticClass: "btn btn-primary button_favorites_pokemon",
+                  on: {
+                    click: function ($event) {
+                      return _vm.favorites(_vm.pokemon.id)
+                    },
+                  },
+                },
+                [
+                  _c("i", [
+                    _c(
+                      "svg",
+                      {
+                        attrs: {
+                          xmlns: "http://www.w3.org/2000/svg",
+                          viewBox: "0 0 576 512",
+                        },
+                      },
+                      [
+                        _c("path", {
+                          attrs: {
+                            d: "M287.9 0C297.1 0 305.5 5.25 309.5 13.52L378.1 154.8L531.4 177.5C540.4 178.8 547.8 185.1 550.7 193.7C553.5 202.4 551.2 211.9 544.8 218.2L433.6 328.4L459.9 483.9C461.4 492.9 457.7 502.1 450.2 507.4C442.8 512.7 432.1 513.4 424.9 509.1L287.9 435.9L150.1 509.1C142.9 513.4 133.1 512.7 125.6 507.4C118.2 502.1 114.5 492.9 115.1 483.9L142.2 328.4L31.11 218.2C24.65 211.9 22.36 202.4 25.2 193.7C28.03 185.1 35.5 178.8 44.49 177.5L197.7 154.8L266.3 13.52C270.4 5.249 278.7 0 287.9 0L287.9 0zM287.9 78.95L235.4 187.2C231.9 194.3 225.1 199.3 217.3 200.5L98.98 217.9L184.9 303C190.4 308.5 192.9 316.4 191.6 324.1L171.4 443.7L276.6 387.5C283.7 383.7 292.2 383.7 299.2 387.5L404.4 443.7L384.2 324.1C382.9 316.4 385.5 308.5 391 303L476.9 217.9L358.6 200.5C350.7 199.3 343.9 194.3 340.5 187.2L287.9 78.95z",
+                          },
+                        }),
+                      ]
+                    ),
+                  ]),
+                  _vm._v(" Add to favorites"),
+                ]
+              ),
         ]),
         _vm._v(" "),
         _c("img", {

@@ -67,15 +67,28 @@ class PokemonsController extends Controller
 
             $user = User::where('id', $request->id)->first();
 
-            $favorite = new Favorite();
-            $favorite->ref_api = $request->ref;
-            $favorite->id_usuario = $user->id;
-            $favorite->save();
+            $favorite = Favorite::where('id_usuario', $user->id)->where('ref_api', $request->ref)->get();
+
+            if ($favorite->count() == 0) {
+
+                $favorite = new Favorite();
+                $favorite->ref_api = $request->ref;
+                $favorite->id_usuario = $user->id;
+                $favorite->save();
+
+                $result = true;
+
+            } else {
+                $item = $favorite->first();
+                $item->delete();
+
+                $result = false;
+            }
 
             return response()->json($this->generate_response(
                 array(
                     "message" => "Update successfully",
-                    "data" => $favorite,
+                    "data" => $result,
                 ),
                 'SUCCESS'
             ));
@@ -88,4 +101,36 @@ class PokemonsController extends Controller
             ));
         }
     }
+
+    public function validation(Request $request)
+    {
+        try {
+
+            $favorite = Favorite::where('id_usuario', $request->user)->where('ref_api', $request->ref)->get();
+
+            $result = null;
+
+            if ($favorite->count() == 0) {
+                $result = false;
+            } else {
+                $result = true;
+            }
+
+            return response()->json($this->generate_response(
+                array(
+                    "message" => "favorite vaiidate",
+                    "data" => $result,
+                ),
+                'SUCCESS'
+            ));
+        } catch (Exception $e) {
+            return response()->json($this->generate_response(
+                array(
+                    "message" => $e->getMessage(),
+                    "status_code" => $e->getCode(),
+                )
+            ));
+        }
+    }
+
 }

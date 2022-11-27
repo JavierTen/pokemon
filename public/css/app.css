@@ -97,6 +97,7 @@ body {
   background-color: var(--bs-body-bg);
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  cursor: default;
 }
 
 hr {
@@ -128,7 +129,7 @@ h2, .h2 {
 }
 @media (min-width: 1200px) {
   h2, .h2 {
-    font-size: 1.8rem;
+    font-size: 1rem;
   }
 }
 
@@ -4148,13 +4149,16 @@ textarea.form-control-lg {
   --bs-card-spacer-x: 1rem;
   --bs-card-title-spacer-y: 0.5rem;
   --bs-card-border-width: 1px;
-  --bs-card-border-color: var(--bs-border-color-translucent);
+  --bs-card-border-color:
+  var(--bs-border-color-translucent);
   --bs-card-border-radius: 0.375rem;
   --bs-card-box-shadow: ;
-  --bs-card-inner-border-radius: calc(0.375rem - 1px);
+  --bs-card-inner-border-radius:
+  calc(0.375rem - 1px);
   --bs-card-cap-padding-y: 0.5rem;
   --bs-card-cap-padding-x: 1rem;
-  --bs-card-cap-bg: rgba(0, 0, 0, 0.03);
+  --bs-card-cap-bg:
+  rgba(0, 0, 0, 0.03);
   --bs-card-cap-color: ;
   --bs-card-height: ;
   --bs-card-color: ;
@@ -4171,6 +4175,7 @@ textarea.form-control-lg {
   background-clip: border-box;
   border: var(--bs-card-border-width) solid var(--bs-card-border-color);
   border-radius: var(--bs-card-border-radius);
+  transition: .3s;
 }
 .card > hr {
   margin-right: 0;
@@ -10909,6 +10914,9 @@ a:link{
     background: #ffff;
     width: 500px;
     height: 550px;
+    box-shadow: 6px 14px 16px -5px rgb(59 58 60 / 40%);
+    border-radius: 10px;
+    display: inline-table;
 }
 
 input{
@@ -10930,4 +10938,65 @@ input{
 .subtitle{
     margin-top: 5px;
 }
+
+.login{background: #ffff;width: 500px;height: 400px;margin: auto;margin-top: 12.5%;box-shadow: 6px 14px 16px -5px rgb(59 58 60 / 40%);border-radius: 10px;}
+
+.content_login{
+    margin: 30px;
+}
+
+.display_grid{
+    display: grid;
+}
+
+.align-content-center{
+    text-align: center;
+}
+
+.signin{
+    background: #ffff;
+    margin: auto;margin-top: 12.5%;
+    width: 500px;
+    height: 400px;
+    box-shadow: 6px 14px 16px -5px rgb(59 58 60 / 40%);
+    border-radius: 10px;
+}
+
+
+.hero-body{
+    display: flex;
+}
+
+.hero-body-login{
+    display: flex;
+    justify-content: space-evenly;
+    align-items: stretch;
+    flex-direction: column;
+}
+
+
+.card:hover{
+    margin: 3px 0 0px 0px;
+    transition: .3s;
+    box-shadow: 6px 14px 16px -5px rgb(59 58 60 / 40%);
+}
+
+
+.favorite {
+     background-color:  #d12e32;
+}
+
+.button_favorites_pokemon {
+    cursor: pointer;
+}
+
+.button_favorites_pokemon {
+    cursor: pointer;
+}
+
+.button_favorites_pokemon:hover {
+    background-color:  #d12e32;
+}
+
+
 

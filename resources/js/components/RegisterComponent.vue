@@ -1,78 +1,45 @@
 <template>
     <div>
-        <div class="signup-nav">
-            <div class="signup-nav-inner">
-                <a href="/" class="logo"
-                    ><img
-                        class="small-footer-logo light-image-l"
-                        src="/assets/img/logos/logo/logo.svg"
-                        alt=""
-                /></a>
-            </div>
-        </div>
+        <div class="container">
 
-        <div class="signup-wrapper">
-            <img
-                class="card-bg"
-                src="/images/backgrounds/signup/vuero-signup.png"
-                alt=""
-            />
-
-            <div class="hero is-fullheight">
+            <div class="signin">
                 <div class="hero-body">
                     <div class="container">
                         <div class="columns signup-columns">
-                            <div class="column is-5 is-offset-1">
-                                <h1
-                                    id="main-signup-title"
-                                    class="title is-3 signup-title"
-                                >
-                                    ¡Bienvenid@!
+                            <div class="column m-4">
+                                <h1 id="main-signup-title" class="title is-3 signup-title">
+                                    Welcome to Pokemon!
                                 </h1>
-                                <h2
-                                    id="main-signup-subtitle"
-                                    class="subtitle signup-subtitle"
-                                >
-                                    Para empezar compártenos la siguiente
-                                    información
+                                <h2 id="main-signup-subtitle" class="subtitle signup-subtitle">
+                                    To get started, share the following information with us.
                                 </h2>
 
-                                <div
-                                    class="alert alert-primary alert-dismissible none mb-4"
-                                    v-bind:class="[error_class]"
-                                >
+                                <div class="alert alert-primary alert-dismissible none mb-4"
+                                    v-bind:class="[error_class]">
                                     <span><i class="mdi mdi-alert"></i></span>
                                     <a v-html="server_errors"></a>
                                     {{ message }}
                                 </div>
 
-                                <div
-                                    class="signup-card login-wrapper auth-wrapper-inner"
-                                >
-                                    <form
-                                        class="signup-form is-mobile-spaced"
-                                        @submit.prevent="submit_form"
-                                    >
+                                <div class="signup-card login-wrapper auth-wrapper-inner">
+                                    <form class="signup-form is-mobile-spaced" @submit.prevent="submit_form">
                                         <div class="columns is-multiline">
                                             <div class="column is-12">
                                                 <div class="field">
                                                     <div class="control">
-                                                        <input
-                                                            type="email"
-                                                            name="email"
-                                                            v-model="email"
-                                                            autocomplete="off"
-                                                            v-validate="
-                                                                'required|email'
-                                                            "
-                                                            class="input"
-                                                            :placeholder="'Por favor ingrese su correo electrónico registrado'"
-                                                        />
-
                                                         <div class="auth-label">
-                                                            Correo Electrónico
+                                                            Email
                                                         </div>
-                                                        <!----><!----><!---->
+                                                        <input type="email" name="email" v-model="email"
+                                                            autocomplete="off" v-validate="
+                                                                'required|email'
+                                                            " class="input"
+                                                            :placeholder="'Por favor ingrese su correo electrónico registrado'" />
+
+
+                                                        <!---->
+                                                        <!---->
+                                                        <!---->
                                                     </div>
                                                 </div>
                                             </div>
@@ -80,44 +47,40 @@
                                             <div class="column is-12">
                                                 <div class="field">
                                                     <div class="control">
-                                                        <input
-                                                            type="password"
-                                                            name="password"
-                                                            v-model="password"
-                                                            autocomplete="off"
-                                                            v-validate="
-                                                                'required'
-                                                            "
-                                                            class="input"
-                                                            :placeholder="'Por favor ingrese su contraseña'"
-                                                        />
-
                                                         <div class="auth-label">
-                                                            Contraseña
+                                                            Password
                                                         </div>
-                                                        <!----><!----><!---->
+                                                        <input type="password" name="password" v-model="password"
+                                                            autocomplete="off" v-validate="
+                                                                'required'
+                                                            " class="input"
+                                                            :placeholder="'Por favor ingrese su contraseña'" />
+
+
+                                                        <!---->
+                                                        <!---->
+                                                        <!---->
                                                     </div>
                                                 </div>
                                             </div>
 
-                                            <div class="column control is-flex">
-                                                <button
-                                                    type="submit"
-                                                    class="button button v-button is-bold is-fullwidth is-raised is-primary"
-                                                    v-bind:disabled="
+                                            <div class="display_grid">
+                                                <button type="submit" class="btn btn-primary" v-bind:disabled="
+                                                    processing == true
+                                                ">
+                                                    <i class="fa fa-circle-notch fa-spin" v-if="
                                                         processing == true
-                                                    "
-                                                >
-                                                    <i
-                                                        class="fa fa-circle-notch fa-spin"
-                                                        v-if="
-                                                            processing == true
-                                                        "
-                                                    ></i>
+                                                    "></i>
                                                     <span v-else>
-                                                        Siguiente
+                                                        Go to pokemon
                                                     </span>
                                                 </button>
+                                                <span class="align-content-center">
+                                                    or login with your account
+                                                    <a href="/login" class="">
+                                                        pokemon
+                                                    </a>
+                                                </span>
                                             </div>
                                         </div>
                                     </form>

@@ -5,8 +5,7 @@
         <div class="container center_form_update">
 
             <div class="update_data m-2">
-                <div class="columns m-4">
-                    <div class="column is-5 m-2">
+                    <div class="column is-5 m-4">
                         <h4  class="subtitle signup-subtitle">
                             Update your account information
                         </h4>
@@ -26,7 +25,7 @@
                                                 <div class="update-label">
                                                     Fullname
                                                 </div>
-                                                <input type="text" name="name" v-model="name" autocomplete="off"
+                                                <input type="text" name="name" id="name" v-model="name" autocomplete="off"
                                                     v-validate="
                                                         'required'
                                                     " class="input" :placeholder="''" />
@@ -44,7 +43,7 @@
                                                 <div class="update-label">
                                                     Address
                                                 </div>
-                                                <input type="text" name="address" v-model="address" autocomplete="off"
+                                                <input type="text" name="address" id="address" v-model="address" autocomplete="off"
                                                     v-validate="
                                                         'required'
                                                     " class="input" :placeholder="''" />
@@ -62,7 +61,7 @@
                                                 <div class="update-label">
                                                     City
                                                 </div>
-                                                <input type="text" name="city" v-model="city" autocomplete="off"
+                                                <input type="text" name="city" id="city"  v-model="city" autocomplete="off"
                                                     v-validate="
                                                         'required'
                                                     " class="input" :placeholder="''" />
@@ -80,7 +79,7 @@
                                                 <div class="update-label">
                                                     Birthday
                                                 </div>
-                                                <input type="date" name="birthdate" v-model="birthdate"
+                                                <input type="date" name="birthdate" id="birthdate"  v-model="birthdate"
                                                     autocomplete="off" v-validate="
                                                         'required'
                                                     " class="input" :placeholder="''" />
@@ -98,7 +97,7 @@
                                                 <div class="update-label">
                                                     Email
                                                 </div>
-                                                <input type="email" name="email" v-model="email" autocomplete="off"
+                                                <input type="email" name="email" id="email" v-model="email" autocomplete="off"
                                                     v-validate="
                                                         'required|email'
                                                     " class="input" :placeholder="''" />
@@ -171,8 +170,33 @@ export default {
     },
     mounted() {
         console.log("Página de inicio de sesión cargada");
+        this.getDetail();
     },
     methods: {
+
+        getDetail() {
+
+            var formData = new FormData();
+            formData.append("id", localStorage.getItem('user'));
+
+            axios
+                .post("/api/user/detail", formData)
+                .then((response) => {
+                    this.processing = false;
+                    if (response.data.status_code === 200) {
+                        document.getElementById("name").value = response.data.data.name;
+                        document.getElementById("email").value = response.data.data.email;
+                        document.getElementById("city").value = response.data.data.city;
+                        document.getElementById("address").value = response.data.data.address;
+                        document.getElementById("birthdate").value = response.data.data.birthdate;
+
+                    }
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        },
+
         submit_form() {
             this.processing = true;
 

@@ -12,9 +12,7 @@
                         <li class="nav-item">
                             <a class="nav-link" aria-current="page" v-bind:href="'/pokemons'">Pokemon's list</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">Favorites</a>
-                        </li>
+
                         <li class="nav-item">
                             <a class="nav-link" v-bind:href="'/update'">Settings</a>
                         </li>

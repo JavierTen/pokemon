@@ -57,6 +57,35 @@ class UserController extends Controller
         }
     }
 
+    public function detail(Request $request)
+    {
+        try {
+
+            $user = User::where('id', $request->id)->first();
+
+            if ($user) {
+
+                return response()->json($this->generate_response(
+                    array(
+                        "message" => "detail successfully",
+                        "data" => $user,
+                    ),
+                    'SUCCESS'
+                ));
+            } else {
+                throw new Exception("Invalid email or password", 401);
+            }
+
+        } catch (Exception $e) {
+            return response()->json($this->generate_response(
+                array(
+                    "message" => $e->getMessage(),
+                    "status_code" => $e->getCode(),
+                )
+            ));
+        }
+    }
+
     public function register(Request $request)
     {
         try {

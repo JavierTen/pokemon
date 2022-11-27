@@ -85,13 +85,13 @@ export default {
             var formData = new FormData();
             formData.append("id", this.id);
             formData.append("ref", this.ref);
-            alert(this.id ,"-", this.ref);
+
             axios
                 .post("/api/user/pokemons/favorite", formData)
                 .then((response) => {
                     this.processing = false;
                     if (response.data.status_code === 200) {
-                        alert('anadiste el pokem a tu lista de favoritos');
+                        alert('You added this pokemon to your favorites');
                     } else {
                         try {
                             var error_json = JSON.parse(response.data.msg);

@@ -5857,55 +5857,6 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 
 
@@ -6060,11 +6011,10 @@ __webpack_require__.r(__webpack_exports__);
       var formData = new FormData();
       formData.append("id", this.id);
       formData.append("ref", this.ref);
-      alert(this.id, "-", this.ref);
       axios.post("/api/user/pokemons/favorite", formData).then(function (response) {
         _this.processing = false;
         if (response.data.status_code === 200) {
-          alert('anadiste el pokem a tu lista de favoritos');
+          alert('You added this pokemon to your favorites');
         } else {
           try {
             var error_json = JSON.parse(response.data.msg);
@@ -29544,7 +29494,7 @@ var render = function () {
                     staticClass: "nav-link",
                     attrs: { "aria-current": "page", href: "/pokemons" },
                   },
-                  [_vm._v("Home")]
+                  [_vm._v("Pokemon's list")]
                 ),
               ]),
               _vm._v(" "),
@@ -29876,363 +29826,340 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c("div", [
     _c("div", { staticClass: "container center_form_update" }, [
-      _c("div", { staticClass: "update_data" }, [
-        _c("div", { staticClass: "hero-body" }, [
-          _c("div", {}, [
-            _c("div", { staticClass: "columns signup-columns" }, [
-              _c("div", { staticClass: "column is-5 is-offset-1" }, [
-                _c(
-                  "h4",
-                  {
-                    staticClass: "subtitle signup-subtitle",
-                    attrs: { id: "main-signup-subtitle" },
-                  },
-                  [
-                    _vm._v(
-                      "\n                                update your account information\n                            "
-                    ),
-                  ]
-                ),
+      _c("div", { staticClass: "update_data m-2" }, [
+        _c("div", { staticClass: "columns m-4" }, [
+          _c("div", { staticClass: "column is-5 m-2" }, [
+            _c("h4", { staticClass: "subtitle signup-subtitle" }, [
+              _vm._v(
+                "\n                        Update your account information\n                    "
+              ),
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              {
+                staticClass: "alert alert-primary alert-dismissible none mb-4",
+                class: [_vm.error_class],
+              },
+              [
+                _vm._m(0),
                 _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass:
-                      "alert alert-primary alert-dismissible none mb-4",
-                    class: [_vm.error_class],
-                  },
-                  [
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _c("a", {
-                      domProps: { innerHTML: _vm._s(_vm.server_errors) },
-                    }),
-                    _vm._v(
-                      "\n                                " +
-                        _vm._s(_vm.message) +
-                        "\n                            "
-                    ),
-                  ]
+                _c("a", { domProps: { innerHTML: _vm._s(_vm.server_errors) } }),
+                _vm._v(
+                  "\n                        " +
+                    _vm._s(_vm.message) +
+                    "\n                    "
                 ),
-                _vm._v(" "),
-                _c(
-                  "div",
-                  {
-                    staticClass: "signup-card login-wrapper auth-wrapper-inner",
+              ]
+            ),
+            _vm._v(" "),
+            _c(
+              "form",
+              {
+                on: {
+                  submit: function ($event) {
+                    $event.preventDefault()
+                    return _vm.submit_form.apply(null, arguments)
                   },
-                  [
-                    _c(
-                      "form",
-                      {
-                        staticClass: "signup-form is-mobile-spaced",
-                        on: {
-                          submit: function ($event) {
-                            $event.preventDefault()
-                            return _vm.submit_form.apply(null, arguments)
+                },
+              },
+              [
+                _c("div", { staticClass: "columns is-multiline" }, [
+                  _c("div", { staticClass: "column is-12" }, [
+                    _c("div", { staticClass: "field" }, [
+                      _c("div", { staticClass: "control" }, [
+                        _c("div", { staticClass: "update-label" }, [
+                          _vm._v(
+                            "\n                                                Fullname\n                                            "
+                          ),
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.name,
+                              expression: "name",
+                            },
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required",
+                              expression:
+                                "\n                                                    'required'\n                                                ",
+                            },
+                          ],
+                          staticClass: "input",
+                          attrs: {
+                            type: "text",
+                            name: "name",
+                            autocomplete: "off",
+                            placeholder: "",
                           },
+                          domProps: { value: _vm.name },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.name = $event.target.value
+                            },
+                          },
+                        }),
+                      ]),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "column is-12" }, [
+                    _c("div", { staticClass: "field" }, [
+                      _c("div", { staticClass: "control" }, [
+                        _c("div", { staticClass: "update-label" }, [
+                          _vm._v(
+                            "\n                                                Address\n                                            "
+                          ),
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.address,
+                              expression: "address",
+                            },
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required",
+                              expression:
+                                "\n                                                    'required'\n                                                ",
+                            },
+                          ],
+                          staticClass: "input",
+                          attrs: {
+                            type: "text",
+                            name: "address",
+                            autocomplete: "off",
+                            placeholder: "",
+                          },
+                          domProps: { value: _vm.address },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.address = $event.target.value
+                            },
+                          },
+                        }),
+                      ]),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "column is-12" }, [
+                    _c("div", { staticClass: "field" }, [
+                      _c("div", { staticClass: "control" }, [
+                        _c("div", { staticClass: "update-label" }, [
+                          _vm._v(
+                            "\n                                                City\n                                            "
+                          ),
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.city,
+                              expression: "city",
+                            },
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required",
+                              expression:
+                                "\n                                                    'required'\n                                                ",
+                            },
+                          ],
+                          staticClass: "input",
+                          attrs: {
+                            type: "text",
+                            name: "city",
+                            autocomplete: "off",
+                            placeholder: "",
+                          },
+                          domProps: { value: _vm.city },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.city = $event.target.value
+                            },
+                          },
+                        }),
+                      ]),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "column is-12" }, [
+                    _c("div", { staticClass: "field" }, [
+                      _c("div", { staticClass: "control" }, [
+                        _c("div", { staticClass: "update-label" }, [
+                          _vm._v(
+                            "\n                                                Birthday\n                                            "
+                          ),
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.birthdate,
+                              expression: "birthdate",
+                            },
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required",
+                              expression:
+                                "\n                                                    'required'\n                                                ",
+                            },
+                          ],
+                          staticClass: "input",
+                          attrs: {
+                            type: "date",
+                            name: "birthdate",
+                            autocomplete: "off",
+                            placeholder: "",
+                          },
+                          domProps: { value: _vm.birthdate },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.birthdate = $event.target.value
+                            },
+                          },
+                        }),
+                      ]),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "column is-12" }, [
+                    _c("div", { staticClass: "field" }, [
+                      _c("div", { staticClass: "control" }, [
+                        _c("div", { staticClass: "update-label" }, [
+                          _vm._v(
+                            "\n                                                Email\n                                            "
+                          ),
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.email,
+                              expression: "email",
+                            },
+                            {
+                              name: "validate",
+                              rawName: "v-validate",
+                              value: "required|email",
+                              expression:
+                                "\n                                                    'required|email'\n                                                ",
+                            },
+                          ],
+                          staticClass: "input",
+                          attrs: {
+                            type: "email",
+                            name: "email",
+                            autocomplete: "off",
+                            placeholder: "",
+                          },
+                          domProps: { value: _vm.email },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.email = $event.target.value
+                            },
+                          },
+                        }),
+                      ]),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "column is-12" }, [
+                    _c("div", { staticClass: "field" }, [
+                      _c("div", { staticClass: "control" }, [
+                        _c("div", { staticClass: "update-label" }, [
+                          _vm._v(
+                            "\n                                                Password\n                                            "
+                          ),
+                        ]),
+                        _vm._v(" "),
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.password,
+                              expression: "password",
+                            },
+                          ],
+                          staticClass: "input",
+                          attrs: {
+                            type: "password",
+                            name: "password",
+                            autocomplete: "off",
+                            placeholder: "",
+                          },
+                          domProps: { value: _vm.password },
+                          on: {
+                            input: function ($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.password = $event.target.value
+                            },
+                          },
+                        }),
+                      ]),
+                    ]),
+                  ]),
+                  _vm._v(" "),
+                  _c("div", { staticClass: "column control is-flex" }, [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-primary btn_save_update",
+                        attrs: {
+                          type: "submit",
+                          disabled: _vm.processing == true,
                         },
                       },
                       [
-                        _c("div", { staticClass: "columns is-multiline" }, [
-                          _c("div", { staticClass: "column is-12" }, [
-                            _c("div", { staticClass: "field" }, [
-                              _c("div", { staticClass: "control" }, [
-                                _c("div", { staticClass: "update-label" }, [
-                                  _vm._v(
-                                    "\n                                                        Fullname\n                                                    "
-                                  ),
-                                ]),
-                                _vm._v(" "),
-                                _c("input", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.name,
-                                      expression: "name",
-                                    },
-                                    {
-                                      name: "validate",
-                                      rawName: "v-validate",
-                                      value: "required",
-                                      expression:
-                                        "\n                                                            'required'\n                                                        ",
-                                    },
-                                  ],
-                                  staticClass: "input",
-                                  attrs: {
-                                    type: "text",
-                                    name: "name",
-                                    autocomplete: "off",
-                                    placeholder: "",
-                                  },
-                                  domProps: { value: _vm.name },
-                                  on: {
-                                    input: function ($event) {
-                                      if ($event.target.composing) {
-                                        return
-                                      }
-                                      _vm.name = $event.target.value
-                                    },
-                                  },
-                                }),
-                              ]),
+                        _vm.processing == true
+                          ? _c("i", {
+                              staticClass: "fa fa-circle-notch fa-spin",
+                            })
+                          : _c("span", [
+                              _vm._v(
+                                "\n                                            Save\n                                        "
+                              ),
                             ]),
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "column is-12" }, [
-                            _c("div", { staticClass: "field" }, [
-                              _c("div", { staticClass: "control" }, [
-                                _c("div", { staticClass: "update-label" }, [
-                                  _vm._v(
-                                    "\n                                                        Address\n                                                    "
-                                  ),
-                                ]),
-                                _vm._v(" "),
-                                _c("input", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.address,
-                                      expression: "address",
-                                    },
-                                    {
-                                      name: "validate",
-                                      rawName: "v-validate",
-                                      value: "required",
-                                      expression:
-                                        "\n                                                            'required'\n                                                        ",
-                                    },
-                                  ],
-                                  staticClass: "input",
-                                  attrs: {
-                                    type: "text",
-                                    name: "address",
-                                    autocomplete: "off",
-                                    placeholder: "",
-                                  },
-                                  domProps: { value: _vm.address },
-                                  on: {
-                                    input: function ($event) {
-                                      if ($event.target.composing) {
-                                        return
-                                      }
-                                      _vm.address = $event.target.value
-                                    },
-                                  },
-                                }),
-                              ]),
-                            ]),
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "column is-12" }, [
-                            _c("div", { staticClass: "field" }, [
-                              _c("div", { staticClass: "control" }, [
-                                _c("div", { staticClass: "update-label" }, [
-                                  _vm._v(
-                                    "\n                                                        City\n                                                    "
-                                  ),
-                                ]),
-                                _vm._v(" "),
-                                _c("input", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.city,
-                                      expression: "city",
-                                    },
-                                    {
-                                      name: "validate",
-                                      rawName: "v-validate",
-                                      value: "required",
-                                      expression:
-                                        "\n                                                            'required'\n                                                        ",
-                                    },
-                                  ],
-                                  staticClass: "input",
-                                  attrs: {
-                                    type: "text",
-                                    name: "city",
-                                    autocomplete: "off",
-                                    placeholder: "",
-                                  },
-                                  domProps: { value: _vm.city },
-                                  on: {
-                                    input: function ($event) {
-                                      if ($event.target.composing) {
-                                        return
-                                      }
-                                      _vm.city = $event.target.value
-                                    },
-                                  },
-                                }),
-                              ]),
-                            ]),
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "column is-12" }, [
-                            _c("div", { staticClass: "field" }, [
-                              _c("div", { staticClass: "control" }, [
-                                _c("div", { staticClass: "update-label" }, [
-                                  _vm._v(
-                                    "\n                                                        Birthday\n                                                    "
-                                  ),
-                                ]),
-                                _vm._v(" "),
-                                _c("input", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.birthdate,
-                                      expression: "birthdate",
-                                    },
-                                    {
-                                      name: "validate",
-                                      rawName: "v-validate",
-                                      value: "required",
-                                      expression:
-                                        "\n                                                            'required'\n                                                        ",
-                                    },
-                                  ],
-                                  staticClass: "input",
-                                  attrs: {
-                                    type: "date",
-                                    name: "birthdate",
-                                    autocomplete: "off",
-                                    placeholder: "",
-                                  },
-                                  domProps: { value: _vm.birthdate },
-                                  on: {
-                                    input: function ($event) {
-                                      if ($event.target.composing) {
-                                        return
-                                      }
-                                      _vm.birthdate = $event.target.value
-                                    },
-                                  },
-                                }),
-                              ]),
-                            ]),
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "column is-12" }, [
-                            _c("div", { staticClass: "field" }, [
-                              _c("div", { staticClass: "control" }, [
-                                _c("div", { staticClass: "update-label" }, [
-                                  _vm._v(
-                                    "\n                                                        Email\n                                                    "
-                                  ),
-                                ]),
-                                _vm._v(" "),
-                                _c("input", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.email,
-                                      expression: "email",
-                                    },
-                                    {
-                                      name: "validate",
-                                      rawName: "v-validate",
-                                      value: "required|email",
-                                      expression:
-                                        "\n                                                            'required|email'\n                                                        ",
-                                    },
-                                  ],
-                                  staticClass: "input",
-                                  attrs: {
-                                    type: "email",
-                                    name: "email",
-                                    autocomplete: "off",
-                                    placeholder: "",
-                                  },
-                                  domProps: { value: _vm.email },
-                                  on: {
-                                    input: function ($event) {
-                                      if ($event.target.composing) {
-                                        return
-                                      }
-                                      _vm.email = $event.target.value
-                                    },
-                                  },
-                                }),
-                              ]),
-                            ]),
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "column is-12" }, [
-                            _c("div", { staticClass: "field" }, [
-                              _c("div", { staticClass: "control" }, [
-                                _c("div", { staticClass: "update-label" }, [
-                                  _vm._v(
-                                    "\n                                                        Password\n                                                    "
-                                  ),
-                                ]),
-                                _vm._v(" "),
-                                _c("input", {
-                                  directives: [
-                                    {
-                                      name: "model",
-                                      rawName: "v-model",
-                                      value: _vm.password,
-                                      expression: "password",
-                                    },
-                                  ],
-                                  staticClass: "input",
-                                  attrs: {
-                                    type: "password",
-                                    name: "password",
-                                    autocomplete: "off",
-                                    placeholder: "",
-                                  },
-                                  domProps: { value: _vm.password },
-                                  on: {
-                                    input: function ($event) {
-                                      if ($event.target.composing) {
-                                        return
-                                      }
-                                      _vm.password = $event.target.value
-                                    },
-                                  },
-                                }),
-                              ]),
-                            ]),
-                          ]),
-                          _vm._v(" "),
-                          _c("div", { staticClass: "column control is-flex" }, [
-                            _c(
-                              "button",
-                              {
-                                staticClass: "btn btn-primary",
-                                attrs: {
-                                  type: "submit",
-                                  disabled: _vm.processing == true,
-                                },
-                              },
-                              [
-                                _vm.processing == true
-                                  ? _c("i", {
-                                      staticClass: "fa fa-circle-notch fa-spin",
-                                    })
-                                  : _c("span", [
-                                      _vm._v(
-                                        "\n                                                    Save\n                                                "
-                                      ),
-                                    ]),
-                              ]
-                            ),
-                          ]),
-                        ]),
                       ]
                     ),
-                  ]
-                ),
-              ]),
-            ]),
+                  ]),
+                ]),
+              ]
+            ),
           ]),
         ]),
       ]),

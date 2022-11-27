@@ -4,197 +4,148 @@
 
         <div class="container center_form_update">
 
-            <div class="update_data">
-                <div class="hero-body">
-                    <div class="">
-                        <div class="columns signup-columns">
-                            <div class="column is-5 is-offset-1">
+            <div class="update_data m-2">
+                <div class="columns m-4">
+                    <div class="column is-5 m-2">
+                        <h4  class="subtitle signup-subtitle">
+                            Update your account information
+                        </h4>
 
-                                <h4 id="main-signup-subtitle" class="subtitle signup-subtitle">
-                                    update your account information
-                                </h4>
+                        <div class="alert alert-primary alert-dismissible none mb-4" v-bind:class="[error_class]">
+                            <span><i class="mdi mdi-alert"></i></span>
+                            <a v-html="server_errors"></a>
+                            {{ message }}
+                        </div>
 
-                                <div
-                                    class="alert alert-primary alert-dismissible none mb-4"
-                                    v-bind:class="[error_class]"
-                                >
-                                    <span><i class="mdi mdi-alert"></i></span>
-                                    <a v-html="server_errors"></a>
-                                    {{ message }}
-                                </div>
 
-                                <div
-                                    class="signup-card login-wrapper auth-wrapper-inner"
-                                >
-                                    <form
-                                        class="signup-form is-mobile-spaced"
-                                        @submit.prevent="submit_form"
-                                    >
-                                        <div class="columns is-multiline">
-                                            <div class="column is-12">
-                                                <div class="field">
-                                                    <div class="control">
-                                                        <div class="update-label">
-                                                            Fullname
-                                                        </div>
-                                                        <input
-                                                            type="text"
-                                                            name="name"
-                                                            v-model="name"
-                                                            autocomplete="off"
-                                                            v-validate="
-                                                                'required'
-                                                            "
-                                                            class="input"
-                                                            :placeholder="''"
-                                                        />
-
-                                                        <!----><!----><!---->
-                                                    </div>
+                            <form @submit.prevent="submit_form">
+                                <div class="columns is-multiline">
+                                    <div class="column is-12">
+                                        <div class="field">
+                                            <div class="control">
+                                                <div class="update-label">
+                                                    Fullname
                                                 </div>
-                                            </div>
+                                                <input type="text" name="name" v-model="name" autocomplete="off"
+                                                    v-validate="
+                                                        'required'
+                                                    " class="input" :placeholder="''" />
 
-                                            <div class="column is-12">
-                                                <div class="field">
-                                                    <div class="control">
-                                                        <div class="update-label">
-                                                            Address
-                                                        </div>
-                                                        <input
-                                                            type="text"
-                                                            name="address"
-                                                            v-model="address"
-                                                            autocomplete="off"
-                                                            v-validate="
-                                                                'required'
-                                                            "
-                                                            class="input"
-                                                            :placeholder="''"
-                                                        />
-
-                                                        <!----><!----><!---->
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="column is-12">
-                                                <div class="field">
-                                                    <div class="control">
-                                                        <div class="update-label">
-                                                            City
-                                                        </div>
-                                                        <input
-                                                            type="text"
-                                                            name="city"
-                                                            v-model="city"
-                                                            autocomplete="off"
-                                                            v-validate="
-                                                                'required'
-                                                            "
-                                                            class="input"
-                                                            :placeholder="''"
-                                                        />
-
-                                                        <!----><!----><!---->
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="column is-12">
-                                                <div class="field">
-                                                    <div class="control">
-                                                        <div class="update-label">
-                                                            Birthday
-                                                        </div>
-                                                        <input
-                                                            type="date"
-                                                            name="birthdate"
-                                                            v-model="birthdate"
-                                                            autocomplete="off"
-                                                            v-validate="
-                                                                'required'
-                                                            "
-                                                            class="input"
-                                                            :placeholder="''"
-                                                        />
-
-                                                        <!----><!----><!---->
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="column is-12">
-                                                <div class="field">
-                                                    <div class="control">
-                                                        <div class="update-label">
-                                                            Email
-                                                        </div>
-                                                        <input
-                                                            type="email"
-                                                            name="email"
-                                                            v-model="email"
-                                                            autocomplete="off"
-                                                            v-validate="
-                                                                'required|email'
-                                                            "
-                                                            class="input"
-                                                            :placeholder="''"
-                                                        />
-
-                                                        <!----><!----><!---->
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="column is-12">
-                                                <div class="field">
-                                                    <div class="control">
-                                                        <div class="update-label">
-                                                            Password
-                                                        </div>
-                                                        <input
-                                                            type="password"
-                                                            name="password"
-                                                            v-model="password"
-                                                            autocomplete="off"
-                                                            class="input"
-                                                            :placeholder="''"
-                                                        />
-
-                                                        <!----><!----><!---->
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="column control is-flex">
-                                                <button
-                                                    type="submit"
-                                                    class="btn btn-primary"
-                                                    v-bind:disabled="
-                                                        processing == true
-                                                    "
-                                                >
-                                                    <i
-                                                        class="fa fa-circle-notch fa-spin"
-                                                        v-if="
-                                                            processing == true
-                                                        "
-                                                    ></i>
-                                                    <span v-else>
-                                                        Save
-                                                    </span>
-                                                </button>
+                                                <!---->
+                                                <!---->
+                                                <!---->
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
+
+                                    <div class="column is-12">
+                                        <div class="field">
+                                            <div class="control">
+                                                <div class="update-label">
+                                                    Address
+                                                </div>
+                                                <input type="text" name="address" v-model="address" autocomplete="off"
+                                                    v-validate="
+                                                        'required'
+                                                    " class="input" :placeholder="''" />
+
+                                                <!---->
+                                                <!---->
+                                                <!---->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="column is-12">
+                                        <div class="field">
+                                            <div class="control">
+                                                <div class="update-label">
+                                                    City
+                                                </div>
+                                                <input type="text" name="city" v-model="city" autocomplete="off"
+                                                    v-validate="
+                                                        'required'
+                                                    " class="input" :placeholder="''" />
+
+                                                <!---->
+                                                <!---->
+                                                <!---->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="column is-12">
+                                        <div class="field">
+                                            <div class="control">
+                                                <div class="update-label">
+                                                    Birthday
+                                                </div>
+                                                <input type="date" name="birthdate" v-model="birthdate"
+                                                    autocomplete="off" v-validate="
+                                                        'required'
+                                                    " class="input" :placeholder="''" />
+
+                                                <!---->
+                                                <!---->
+                                                <!---->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="column is-12">
+                                        <div class="field">
+                                            <div class="control">
+                                                <div class="update-label">
+                                                    Email
+                                                </div>
+                                                <input type="email" name="email" v-model="email" autocomplete="off"
+                                                    v-validate="
+                                                        'required|email'
+                                                    " class="input" :placeholder="''" />
+
+                                                <!---->
+                                                <!---->
+                                                <!---->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="column is-12">
+                                        <div class="field">
+                                            <div class="control">
+                                                <div class="update-label">
+                                                    Password
+                                                </div>
+                                                <input type="password" name="password" v-model="password"
+                                                    autocomplete="off" class="input" :placeholder="''" />
+
+                                                <!---->
+                                                <!---->
+                                                <!---->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="column control is-flex ">
+                                        <button type="submit" class="btn btn-primary btn_save_update" v-bind:disabled="
+                                            processing == true
+                                        ">
+                                            <i class="fa fa-circle-notch fa-spin" v-if="
+                                                processing == true
+                                            "></i>
+                                            <span v-else>
+                                                Save
+                                            </span>
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
 </template>
 
 <script>

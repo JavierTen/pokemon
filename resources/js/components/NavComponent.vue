@@ -10,7 +10,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" aria-current="page" v-bind:href="'/pokemons'">Home</a>
+                            <a class="nav-link" aria-current="page" v-bind:href="'/pokemons'">Pokemon's list</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Favorites</a>

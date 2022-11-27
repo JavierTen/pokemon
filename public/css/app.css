@@ -10847,7 +10847,7 @@ textarea.form-control-lg {
     border-color: var(--bs-btn-hover-border-color);
 }.pokemon img {
     display: block;
-    margin: -40px auto auto;
+    margin: -70px auto auto;
 }
 
 .avatar_pokemon {
@@ -10862,3 +10862,72 @@ textarea.form-control-lg {
     margin-left: 0 !important;
 
 }
+
+h4{
+    font-weight: 600;
+}
+
+.align-end{
+    text-align: end;
+}
+
+.button_favorites_pokemon{
+    width: 30%;
+}
+
+svg {
+    width: 10%;
+    margin-top: -5px;
+}
+
+svg path{
+    fill: #fff;
+}
+
+.back svg path{
+    fill: #000;
+}
+
+a:link{
+    text-decoration:none;
+}
+
+.see_more{
+    width: 100%;
+}
+
+.label_pokemon_list{
+    font-weight: 600;
+    text-align: center;
+}
+
+.center_form_update{
+    text-align: -webkit-center;
+}
+
+.update_data{
+    background: #ffff;
+    width: 500px;
+    height: 550px;
+}
+
+input{
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.update-label{
+    text-align: left;
+    font-weight: 500;
+    margin: 3px 0;
+}
+
+.btn_save_update{
+    margin-top: 5px;
+    width: 100%;
+}
+
+.subtitle{
+    margin-top: 5px;
+}
+

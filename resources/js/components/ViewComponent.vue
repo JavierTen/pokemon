@@ -149,7 +149,7 @@ export default {
 
         getPokemon() {
             axios
-                .get("http://127.0.0.1:8000/api/user/pokemons/view/" + this.name)
+                .get("https://gopokemon.herokuapp.com/api/user/pokemons/view/" + this.name)
                 .then((response) => {
                     this.processing = false;
                     if (response.data.status_code === 200) {

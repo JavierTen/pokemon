@@ -5351,7 +5351,7 @@ __webpack_require__.r(__webpack_exports__);
   methods: {
     getPokemons: function getPokemons() {
       var _this = this;
-      axios.get("http://127.0.0.1:8000/api/user/pokemons").then(function (response) {
+      axios.get("https://gopokemon.herokuapp.com/api/user/pokemons").then(function (response) {
         return _this.pokemons = response.data.data;
       })["catch"](function (error) {
         console.log(error);
@@ -6036,7 +6036,7 @@ __webpack_require__.r(__webpack_exports__);
     },
     getPokemon: function getPokemon() {
       var _this3 = this;
-      axios.get("http://127.0.0.1:8000/api/user/pokemons/view/" + this.name).then(function (response) {
+      axios.get("https://gopokemon.herokuapp.com/api/user/pokemons/view/" + this.name).then(function (response) {
         _this3.processing = false;
         if (response.data.status_code === 200) {
           _this3.pokemon = response.data.data;

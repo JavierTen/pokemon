@@ -36,7 +36,7 @@ export default {
     methods: {
         getPokemons() {
             axios
-                .get("http://127.0.0.1:8000/api/user/pokemons")
+                .get("https://gopokemon.herokuapp.com/api/user/pokemons")
                 .then((response) => (this.pokemons = response.data.data))
                 .catch((error) => {
                     console.log(error);

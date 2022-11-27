@@ -29682,8 +29682,7 @@ var render = function () {
                                     type: "email",
                                     name: "email",
                                     autocomplete: "off",
-                                    placeholder:
-                                      "Por favor ingrese su correo electrónico registrado",
+                                    placeholder: "Please enter your email",
                                   },
                                   domProps: { value: _vm.email },
                                   on: {
@@ -29729,8 +29728,7 @@ var render = function () {
                                     type: "password",
                                     name: "password",
                                     autocomplete: "off",
-                                    placeholder:
-                                      "Por favor ingrese su contraseña",
+                                    placeholder: "Please enter your password",
                                   },
                                   domProps: { value: _vm.password },
                                   on: {

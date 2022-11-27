@@ -34,7 +34,7 @@
                                                             autocomplete="off" v-validate="
                                                                 'required|email'
                                                             " class="input"
-                                                            :placeholder="'Por favor ingrese su correo electrónico registrado'" />
+                                                            :placeholder="'Please enter your email'" />
 
 
                                                         <!---->
@@ -54,7 +54,7 @@
                                                             autocomplete="off" v-validate="
                                                                 'required'
                                                             " class="input"
-                                                            :placeholder="'Por favor ingrese su contraseña'" />
+                                                            :placeholder="'Please enter your password'" />
 
 
                                                         <!---->

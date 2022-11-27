@@ -10983,7 +10983,8 @@ input{
 
 
 .favorite {
-     background-color:  #d12e32;
+     background-color: #489b2e;
+     border-color: #489b2e;
 }
 
 .button_favorites_pokemon {
@@ -10995,7 +10996,8 @@ input{
 }
 
 .button_favorites_pokemon:hover {
-    background-color:  #d12e32;
+    background-color:  #489b2e;
+    border-color: #489b2e;
 }
 
 
